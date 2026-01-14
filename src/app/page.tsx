@@ -1,6 +1,6 @@
 "use client"
 
-import { PaintBucket, Sparkles, Home, RefreshCw, Phone, Mail, MapPin, Star, Shield, Clock, Award } from 'lucide-react'
+import { PaintBucket, Sparkles, Home, RefreshCw, Phone, Mail, Star, Shield, Clock, Award } from 'lucide-react'
 import ServiceCard from '@/components/ServiceCard'
 import { useEffect } from 'react'
 
@@ -27,7 +27,7 @@ export default function LandingPage() {
 
           // Change logo to white/light colors
           const logo = navbar.querySelector('.bg-gradient-to-r');
-          if (logo && logo.textContent?.includes('M4 PRO SOLUTION')) {
+          if (logo && logo.textContent?.includes('M4 PRO SOLUTIONS')) {
             logo.classList.remove('from-slate-900', 'via-blue-900', 'to-indigo-900');
             logo.classList.add('from-gray-100', 'via-white', 'to-gray-200');
           }
@@ -44,7 +44,7 @@ export default function LandingPage() {
 
           // Reset logo to dark colors
           const logo = navbar.querySelector('.bg-gradient-to-r');
-          if (logo && logo.textContent?.includes('M4 PRO SOLUTION')) {
+          if (logo && logo.textContent?.includes('M4 PRO SOLUTIONS')) {
             logo.classList.add('from-slate-900', 'via-blue-900', 'to-indigo-900');
             logo.classList.remove('from-gray-100', 'via-white', 'to-gray-200');
           }
@@ -130,7 +130,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-between h-16 sm:h-20">
             <div className="flex items-center space-x-4 sm:space-x-8">
               <div className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent tracking-tight hover:scale-105 transition-transform duration-300 cursor-pointer">
-                M4 PRO SOLUTION
+                M4 PRO SOLUTIONS
               </div>
               <div className="hidden md:flex items-center space-x-8 text-slate-700">
                 <a href="#services" className="hover:text-blue-800 transition-colors duration-300 font-medium relative group">
@@ -158,6 +158,15 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="pt-20 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden transition-all duration-1000">
+        {/* Subtle apartment background */}
+        <div
+          className="absolute inset-0 bg-cover bg-no-repeat opacity-50"
+          style={{
+            backgroundImage: 'url("/apartment-bg.jpg")',
+            backgroundPosition: 'center 75%'
+          }}
+        ></div>
+
         <div className="absolute inset-0 bg-gradient-to-r from-slate-800/5 via-blue-900/5 to-indigo-900/5 transition-all duration-1000"></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-slate-700 to-blue-900 rounded-full opacity-10 blur-3xl animate-pulse parallax-bg floating-element"></div>
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-br from-blue-800 to-indigo-900 rounded-full opacity-10 blur-3xl animate-pulse delay-1000 parallax-bg floating-element"></div>
@@ -204,7 +213,7 @@ export default function LandingPage() {
               <span className="block bg-gradient-to-r from-slate-800 via-blue-800 to-indigo-900 bg-clip-text text-transparent">Apartment Rehabilitation</span>
             </h2>
             <p className="text-xl text-slate-700 max-w-4xl mx-auto leading-relaxed mb-12 font-medium">
-              M4 PRO SOLUTION revolutionizes apartment turnovers by providing comprehensive rehabilitation services.
+              M4 PRO SOLUTIONS revolutionizes apartment turnovers by providing comprehensive rehabilitation services.
               From professional painting to deep cleaning and full restoration, we ensure every unit meets the highest
               standards for incoming tenants while maximizing property value.
             </p>
@@ -293,7 +302,7 @@ export default function LandingPage() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Why Choose M4 PRO SOLUTION?</h2>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Why Choose M4 PRO SOLUTIONS?</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               We understand the unique challenges of apartment management and deliver solutions that work
             </p>
@@ -342,7 +351,7 @@ export default function LandingPage() {
               <div className="relative z-10">
                 <h3 className="text-3xl font-bold mb-6 tracking-tight">Ready to Transform Your Properties?</h3>
                 <p className="text-blue-100 mb-8 text-lg font-medium">
-                  Join hundreds of satisfied property managers who trust M4 PRO SOLUTION for their apartment rehabilitation needs.
+                  Join hundreds of satisfied property managers who trust M4 PRO SOLUTIONS for their apartment rehabilitation needs.
                 </p>
                 <a href="mailto:hermessonmeiraus@gmail.com?subject=Free%20Quote%20Request&body=Hello%20M4%20PRO%20SOLUTION,%0A%0AI%20would%20like%20to%20receive%20a%20free%20quote%20for%20apartment%20rehabilitation%20services.%0A%0AProject%20Details:%0A-%20Property%20location:%20%0A-%20Number%20of%20units:%20%0A-%20Services%20needed:%20%0A-%20Timeline:%20%0A%0APlease%20contact%20me%20at%20your%20earliest%20convenience.%0A%0AThank%20you!" className="bg-white/95 backdrop-blur-sm text-slate-800 px-8 py-3 rounded-full font-semibold hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
                   Get Your Free Quote
@@ -378,17 +387,6 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-              <div className="animate-fade-in-up delay-200">
-                <div className="flex items-center space-x-4 p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/15 hover:scale-105 transition-all duration-500 group">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-800 to-slate-800 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">Location</h3>
-                    <p className="text-slate-300">152 Cricket Dr, Malvern, PA 19355</p>
-                  </div>
-                </div>
-              </div>
             </div>
             <div className="animate-fade-in-up delay-300">
               <div className="bg-gradient-to-br from-slate-800/90 to-gray-800/90 backdrop-blur-lg p-8 rounded-3xl text-white border border-white/10 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105">
@@ -412,10 +410,10 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-gradient-to-r from-slate-900 via-gray-900 to-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-700">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="text-3xl font-bold mb-4 bg-gradient-to-r from-slate-300 via-blue-300 to-slate-400 bg-clip-text text-transparent tracking-tight">M4 PRO SOLUTION</div>
+          <div className="text-3xl font-bold mb-4 bg-gradient-to-r from-slate-300 via-blue-300 to-slate-400 bg-clip-text text-transparent tracking-tight">M4 PRO SOLUTIONS</div>
           <p className="text-slate-400 mb-8 font-medium">Professional Apartment Rehabilitation Services</p>
           <div className="border-t border-slate-800 pt-8">
-            <p className="text-slate-400">© 2026 M4 PRO SOLUTION. All rights reserved.</p>
+            <p className="text-slate-400">© 2026 M4 PRO SOLUTIONS. All rights reserved.</p>
           </div>
         </div>
       </footer>

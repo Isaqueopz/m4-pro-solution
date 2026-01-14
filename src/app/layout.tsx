@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "M4 PRO SOLUTION - Professional Apartment Rehabilitation Services",
+  title: "M4 PRO SOLUTIONS - Professional Apartment Rehabilitation Services",
   description: "Complete apartment turnover and rehabilitation services. Professional painting, deep cleaning, and full restoration for property managers and apartment communities.",
 };
 
