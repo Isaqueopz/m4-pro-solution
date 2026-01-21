@@ -1,5 +1,6 @@
-'use client'
+"use client"
 
+import Image from "next/image"
 import {
   PaintBucket,
   Sparkles,
@@ -11,67 +12,260 @@ import {
   Shield,
   Clock,
   Award,
-} from 'lucide-react'
-import ServiceCard from '@/components/ServiceCard'
-import { useEffect } from 'react'
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react"
+import ServiceCard from "@/components/ServiceCard"
+import { useEffect, useState } from "react"
+
+// Testimonials data
+const testimonials = [
+  {
+    id: 1,
+    name: "Isaque Misael",
+    title: "Property Manager, Downtown Residences",
+    text: "M4 PRO SOLUTIONS transformed our complex beyond expectations. Their attention to detail is remarkable - every unit looks brand new and tenants are amazed.",
+    initials: "IM",
+    gradient: "from-blue-600 to-indigo-600",
+  },
+  {
+    id: 2,
+    name: "Luis Oliveira",
+    title: "CEO, Lone Star Properties",
+    text: "Outstanding service! Completed our 15-unit project in record time without compromising quality. Professional, reliable, and results speak for themselves.",
+    initials: "LO",
+    gradient: "from-slate-600 to-gray-700",
+  },
+  {
+    id: 3,
+    name: "Sarah Johnson",
+    title: "Portfolio Manager, Luxury Apartments",
+    text: "We've worked with several contractors over the years, but M4 PRO SOLUTIONS is in a league of their own. Fast, efficient, and incredibly thorough. Our vacancy periods have been cut in half!",
+    initials: "SJ",
+    gradient: "from-indigo-600 to-purple-600",
+  },
+  {
+    id: 4,
+    name: "Michael Thompson",
+    title: "Property Management Director",
+    text: "Their full room restoration service is absolutely phenomenal. What used to take weeks with multiple contractors, M4 PRO completes in days with superior results. They've become our go-to partner.",
+    initials: "MT",
+    gradient: "from-green-600 to-teal-600",
+  },
+  {
+    id: 5,
+    name: "Emily Rodriguez",
+    title: "Real Estate Developer",
+    text: "Professional, punctual, and precise. M4 PRO SOLUTIONS has helped us flip over 50 properties this year. Their carpet cleaning alone has saved us thousands in replacement costs.",
+    initials: "ER",
+    gradient: "from-rose-600 to-pink-600",
+  },
+  {
+    id: 6,
+    name: "David Miller",
+    title: "Apartment Complex Owner",
+    text: "The transformation they achieved in our 200-unit complex was remarkable. From outdated to modern in just 3 weeks. Tenants are staying longer and we're getting premium rates.",
+    initials: "DM",
+    gradient: "from-orange-600 to-red-600",
+  },
+  {
+    id: 7,
+    name: "Jessica Wilson",
+    title: "Investment Property Manager",
+    text: "M4 PRO SOLUTIONS doesn't just clean and paint - they elevate properties. Their attention to detail and commitment to excellence has increased our property values significantly.",
+    initials: "JW",
+    gradient: "from-cyan-600 to-blue-600",
+  },
+]
+
+// Testimonial Carousel Component
+function TestimonialCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+
+  const nextTestimonial = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+  }
+
+  const prevTestimonial = () => {
+    setCurrentIndex(
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
+    )
+  }
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index)
+  }
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (isAutoPlaying) {
+      const interval = setInterval(() => {
+        nextTestimonial()
+      }, 5000)
+      return () => clearInterval(interval)
+    }
+  }, [currentIndex, isAutoPlaying])
+
+  // Get current testimonials to display (3 at a time on desktop)
+  const getVisibleTestimonials = () => {
+    const visible = []
+    for (let i = 0; i < 3; i++) {
+      const index = (currentIndex + i) % testimonials.length
+      visible.push(testimonials[index])
+    }
+    return visible
+  }
+
+  return (
+    <div className="relative">
+      {/* Main carousel */}
+      <div
+        className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+        onMouseEnter={() => setIsAutoPlaying(false)}
+        onMouseLeave={() => setIsAutoPlaying(true)}
+      >
+        {getVisibleTestimonials().map((testimonial, index) => (
+          <div
+            key={`${testimonial.id}-${currentIndex}`}
+            className="group relative flex h-80 flex-col overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
+            style={{
+              animationDelay: `${index * 100}ms`,
+              animation: "fadeInUp 0.6s ease-out forwards",
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+            <div className="relative z-10 flex h-full flex-col p-8">
+              <div className="mb-6 flex text-yellow-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-5 w-5 fill-current" />
+                ))}
+              </div>
+              <blockquote className="mb-6 flex-grow text-lg leading-relaxed font-medium text-gray-700">
+                "{testimonial.text}"
+              </blockquote>
+              <div className="mt-auto flex items-center">
+                <div
+                  className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${testimonial.gradient} font-semibold text-white`}
+                >
+                  {testimonial.initials}
+                </div>
+                <div className="ml-4 min-w-0 flex-1">
+                  <div className="text-base leading-tight font-semibold text-gray-900">
+                    {testimonial.name}
+                  </div>
+                  <div className="mt-1 text-sm leading-tight text-gray-500">
+                    {testimonial.title}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Navigation arrows */}
+      <button
+        onClick={prevTestimonial}
+        className="absolute top-1/2 left-0 z-10 -translate-x-4 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
+        aria-label="Previous testimonials"
+      >
+        <ChevronLeft className="h-6 w-6 text-gray-600" />
+      </button>
+
+      <button
+        onClick={nextTestimonial}
+        className="absolute top-1/2 right-0 z-10 translate-x-4 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
+        aria-label="Next testimonials"
+      >
+        <ChevronRight className="h-6 w-6 text-gray-600" />
+      </button>
+
+      {/* Dots indicator */}
+      <div className="mt-8 flex justify-center space-x-2">
+        {testimonials.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`h-3 w-3 rounded-full transition-all duration-300 ${
+              index === currentIndex
+                ? "scale-125 bg-blue-600"
+                : "bg-gray-300 hover:bg-gray-400"
+            }`}
+            aria-label={`Go to testimonial ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-4 h-1 w-full rounded-full bg-gray-200">
+        <div
+          className="h-1 rounded-full bg-blue-600 transition-all duration-300"
+          style={{
+            width: `${((currentIndex + 1) / testimonials.length) * 100}%`,
+          }}
+        ></div>
+      </div>
+    </div>
+  )
+}
 
 export default function LandingPage() {
   useEffect(() => {
-    const navbar = document.querySelector('nav')
+    const navbar = document.querySelector("nav")
 
     const handleScroll = () => {
       const scrolled = window.pageYOffset
       const windowHeight = window.innerHeight
 
-      // Navbar color change effect
+      // Enhanced Navbar color change effect
       if (navbar) {
         if (scrolled > 100) {
-          navbar.classList.remove('bg-white/95')
-          navbar.classList.add('bg-slate-900', 'text-white')
+          navbar.classList.remove("bg-white/90", "border-slate-200/20")
+          navbar.classList.add(
+            "bg-slate-900/95",
+            "border-slate-700/30",
+            "text-white",
+          )
 
-          // Only change navigation links, not logo or button
+          // Change navigation links
           const navLinks = navbar.querySelectorAll('a[href^="#"]')
           navLinks.forEach((link) => {
-            link.classList.remove('text-slate-700')
-            link.classList.add('text-white')
+            link.classList.remove("text-slate-700", "hover:text-blue-700")
+            link.classList.add("text-white", "hover:text-blue-300")
           })
 
-          // Change logo to white/light colors
-          const logo = navbar.querySelector('.bg-gradient-to-r')
-          if (logo && logo.textContent?.includes('M4 PRO SOLUTIONS')) {
-            logo.classList.remove(
-              'from-slate-900',
-              'via-blue-900',
-              'to-indigo-900',
-            )
-            logo.classList.add('from-gray-100', 'via-white', 'to-gray-200')
+          // Add subtle white outline to logo for dark header
+          const logoImg = navbar.querySelector(".logo-icon img") as HTMLElement
+          if (logoImg) {
+            logoImg.style.filter =
+              "drop-shadow(0.5px 0.5px 0px rgba(255,255,255,0.6)) drop-shadow(-0.5px -0.5px 0px rgba(255,255,255,0.6)) drop-shadow(0.5px -0.5px 0px rgba(255,255,255,0.6)) drop-shadow(-0.5px 0.5px 0px rgba(255,255,255,0.6))"
           }
         } else {
-          navbar.classList.add('bg-white/95')
-          navbar.classList.remove('bg-slate-900', 'text-white')
+          navbar.classList.add("bg-white/90", "border-slate-200/20")
+          navbar.classList.remove(
+            "bg-slate-900/95",
+            "border-slate-700/30",
+            "text-white",
+          )
 
           // Reset navigation links
           const navLinks = navbar.querySelectorAll('a[href^="#"]')
           navLinks.forEach((link) => {
-            link.classList.add('text-slate-700')
-            link.classList.remove('text-white')
+            link.classList.add("text-slate-700", "hover:text-blue-700")
+            link.classList.remove("text-white", "hover:text-blue-300")
           })
 
-          // Reset logo to dark colors
-          const logo = navbar.querySelector('.bg-gradient-to-r')
-          if (logo && logo.textContent?.includes('M4 PRO SOLUTIONS')) {
-            logo.classList.add(
-              'from-slate-900',
-              'via-blue-900',
-              'to-indigo-900',
-            )
-            logo.classList.remove('from-gray-100', 'via-white', 'to-gray-200')
+          // Remove outline from logo
+          const logoImg = navbar.querySelector(".logo-icon img") as HTMLElement
+          if (logoImg) {
+            logoImg.style.filter = ""
           }
         }
       }
 
       // Simple parallax effects
-      const parallaxElements = document.querySelectorAll('.parallax-bg')
+      const parallaxElements = document.querySelectorAll(".parallax-bg")
       parallaxElements.forEach((element) => {
         const speed = 0.5
         const yPos = -(scrolled * speed)
@@ -79,7 +273,7 @@ export default function LandingPage() {
       })
 
       // Section-based blur effect with mobile optimization
-      const sections = document.querySelectorAll('section')
+      const sections = document.querySelectorAll("section")
       let currentSection = 0
 
       sections.forEach((section, index) => {
@@ -112,9 +306,9 @@ export default function LandingPage() {
       sections.forEach((section, index) => {
         if (index === currentSection) {
           // Current section - clear and visible
-          ;(section as HTMLElement).style.filter = 'blur(0px)'
-          ;(section as HTMLElement).style.opacity = '1'
-          ;(section as HTMLElement).style.transform = 'scale(1)'
+          ;(section as HTMLElement).style.filter = "blur(0px)"
+          ;(section as HTMLElement).style.opacity = "1"
+          ;(section as HTMLElement).style.transform = "scale(1)"
         } else {
           // Other sections - blurred (less aggressive on mobile)
           const distance = Math.abs(index - currentSection)
@@ -128,66 +322,139 @@ export default function LandingPage() {
 
           ;(section as HTMLElement).style.filter = `blur(${blurAmount}px)`
           ;(section as HTMLElement).style.opacity = `${opacityAmount}`
-          ;(section as HTMLElement).style.transform = 'scale(0.98)'
+          ;(section as HTMLElement).style.transform = "scale(0.98)"
         }
       })
 
       // Simple reveal animations for elements within current section
-      const revealElements = document.querySelectorAll('.scroll-reveal')
+      const revealElements = document.querySelectorAll(".scroll-reveal")
       revealElements.forEach((element) => {
         const elementTop = element.getBoundingClientRect().top
         const elementVisible = 150
 
         if (elementTop < windowHeight - elementVisible) {
-          element.classList.add('revealed')
+          element.classList.add("revealed")
         }
       })
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="fixed top-0 z-50 w-full border-b border-slate-200/50 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-500">
-        <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between sm:h-20">
-            <div className="flex items-center space-x-4 sm:space-x-8">
-              <div className="cursor-pointer bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-lg font-bold tracking-tight text-transparent transition-transform duration-300 hover:scale-105 sm:text-2xl">
-                M4 PRO SOLUTIONS
-              </div>
-              <div className="hidden items-center space-x-8 text-slate-700 md:flex">
-                <a
-                  href="#services"
-                  className="group relative font-medium transition-colors duration-300 hover:text-blue-800"
-                >
-                  Services
-                  <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-blue-800 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a
-                  href="#about"
-                  className="group relative font-medium transition-colors duration-300 hover:text-blue-800"
-                >
-                  About
-                  <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-blue-800 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a
-                  href="#contact"
-                  className="group relative font-medium transition-colors duration-300 hover:text-blue-800"
-                >
-                  Contact
-                  <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-blue-800 transition-all duration-300 group-hover:w-full"></span>
-                </a>
+      <nav className="fixed top-0 z-50 w-full border-b border-slate-200/20 bg-white/90 shadow-sm backdrop-blur-2xl transition-all duration-500 hover:shadow-md">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-20 items-center justify-center sm:h-22 md:h-24">
+            {/* Logo Section - Centered */}
+            <div className="absolute left-4 flex items-center sm:left-6 lg:left-8">
+              <div className="relative">
+                {/* Logo Image */}
+                <div className="logo-icon transition-all duration-300 hover:scale-105">
+                  <Image
+                    src="/logo.png"
+                    alt="M4 PRO SOLUTIONS Logo"
+                    width={290}
+                    height={140}
+                    className="h-20 w-auto object-contain drop-shadow-sm filter transition-all duration-300 sm:h-22 md:h-35"
+                    priority
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex items-center">
+
+            {/* Desktop Navigation - Centered */}
+            <div className="hidden items-center space-x-10 md:flex">
+              <a
+                href="#services"
+                className="group relative px-4 py-2 font-semibold text-slate-700 transition-all duration-300 hover:text-blue-700"
+              >
+                <span className="relative z-10">Services</span>
+                <div className="absolute inset-0 scale-0 rounded-lg bg-blue-50 transition-transform duration-300 group-hover:scale-100"></div>
+                <span className="absolute right-4 -bottom-1 left-4 h-0.5 scale-x-0 bg-gradient-to-r from-blue-600 to-indigo-600 transition-transform duration-300 group-hover:scale-x-100"></span>
+              </a>
+              <a
+                href="#about"
+                className="group relative px-4 py-2 font-semibold text-slate-700 transition-all duration-300 hover:text-blue-700"
+              >
+                <span className="relative z-10">About</span>
+                <div className="absolute inset-0 scale-0 rounded-lg bg-blue-50 transition-transform duration-300 group-hover:scale-100"></div>
+                <span className="absolute right-4 -bottom-1 left-4 h-0.5 scale-x-0 bg-gradient-to-r from-blue-600 to-indigo-600 transition-transform duration-300 group-hover:scale-x-100"></span>
+              </a>
+              <a
+                href="#contact"
+                className="group relative px-4 py-2 font-semibold text-slate-700 transition-all duration-300 hover:text-blue-700"
+              >
+                <span className="relative z-10">Contact</span>
+                <div className="absolute inset-0 scale-0 rounded-lg bg-blue-50 transition-transform duration-300 group-hover:scale-100"></div>
+                <span className="absolute right-4 -bottom-1 left-4 h-0.5 scale-x-0 bg-gradient-to-r from-blue-600 to-indigo-600 transition-transform duration-300 group-hover:scale-x-100"></span>
+              </a>
+            </div>
+
+            {/* Right Side - CTA & Mobile Menu */}
+            <div className="absolute right-4 flex items-center space-x-4 sm:right-6 lg:right-8">
+              {/* CTA Button */}
               <a
                 href="mailto:hermessonmeiraus@gmail.com?subject=Quote%20Request"
-                className="transform rounded-full bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 px-4 py-2 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:via-blue-800 hover:to-blue-900 hover:shadow-xl sm:px-6 sm:py-3 sm:text-base"
+                className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 px-5 py-3 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl sm:px-7 sm:py-3.5 sm:text-base"
               >
-                Get a Quote
+                <span className="relative z-10 flex items-center space-x-2">
+                  <span>Get Quote</span>
+                  <Mail className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+              </a>
+
+              {/* Mobile Menu Button */}
+              <button
+                id="mobile-menu-button"
+                className="relative h-10 w-10 rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 focus:outline-none md:hidden"
+                onClick={() => {
+                  const menu = document.getElementById("mobile-menu")
+                  const button = document.getElementById("mobile-menu-button")
+                  if (menu && button) {
+                    menu.classList.toggle("hidden")
+                    button.classList.toggle("active")
+                  }
+                }}
+              >
+                <div className="flex flex-col items-center justify-center space-y-1">
+                  <span className="block h-0.5 w-5 bg-slate-700 transition-all duration-300"></span>
+                  <span className="block h-0.5 w-5 bg-slate-700 transition-all duration-300"></span>
+                  <span className="block h-0.5 w-5 bg-slate-700 transition-all duration-300"></span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          <div
+            id="mobile-menu"
+            className="hidden border-t border-slate-200/50 bg-white/95 backdrop-blur-xl md:hidden"
+          >
+            <div className="space-y-4 px-4 py-6">
+              <a
+                href="#services"
+                className="flex items-center space-x-3 rounded-lg px-4 py-3 text-base font-semibold text-slate-700 transition-all duration-300 hover:bg-blue-50 hover:text-blue-700"
+              >
+                <PaintBucket className="h-5 w-5" />
+                <span>Services</span>
+              </a>
+              <a
+                href="#about"
+                className="flex items-center space-x-3 rounded-lg px-4 py-3 text-base font-semibold text-slate-700 transition-all duration-300 hover:bg-blue-50 hover:text-blue-700"
+              >
+                <Shield className="h-5 w-5" />
+                <span>About</span>
+              </a>
+              <a
+                href="#contact"
+                className="flex items-center space-x-3 rounded-lg px-4 py-3 text-base font-semibold text-slate-700 transition-all duration-300 hover:bg-blue-50 hover:text-blue-700"
+              >
+                <Phone className="h-5 w-5" />
+                <span>Contact</span>
               </a>
             </div>
           </div>
@@ -201,7 +468,7 @@ export default function LandingPage() {
           className="absolute inset-0 bg-cover bg-no-repeat opacity-50"
           style={{
             backgroundImage: 'url("/apartment-bg.jpg")',
-            backgroundPosition: 'center 75%',
+            backgroundPosition: "center 44%",
           }}
         ></div>
 
@@ -223,12 +490,10 @@ export default function LandingPage() {
                 Transitions
               </span>
             </h1>
-            <p className="animate-fade-in-up mx-auto mb-10 max-w-4xl text-xl leading-relaxed font-medium text-slate-700 delay-200 lg:text-2xl">
-              Professional painting, deep cleaning, and complete restoration
-              services for apartment turnovers. We handle every detail so you
-              can focus on what matters most.
+            <p className="animate-fade-in-up mx-auto mb-10 text-center text-2xl leading-relaxed font-bold tracking-wide text-slate-700 italic delay-200 lg:text-3xl">
+              Every solution you need in one place
             </p>
-            <div className="animate-fade-in-up scroll-reveal flex flex-col justify-center gap-4 delay-400 sm:flex-row">
+            <div className="animate-fade-in-up scroll-reveal mt-27 flex flex-col justify-center gap-4 delay-400 sm:flex-row">
               <a
                 href="mailto:hermessonmeiraus@gmail.com?subject=Get%20Started%20-%20Apartment%20Rehabilitation&body=Hi%20M4%20PRO%20SOLUTION,%0A%0AI'm%20interested%20in%20your%20apartment%20rehabilitation%20services.%20Please%20contact%20me%20to%20discuss%20my%20project.%0A%0AThank%20you!"
                 className="group relative transform overflow-hidden rounded-full bg-gradient-to-r from-slate-800 via-blue-800 to-indigo-900 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all duration-500 hover:scale-110 hover:from-slate-900 hover:via-blue-900 hover:to-indigo-950 hover:shadow-2xl"
@@ -320,6 +585,12 @@ export default function LandingPage() {
       <section
         id="services"
         className="scroll-reveal relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50/50 px-4 py-20 sm:px-6 lg:px-8"
+        style={{
+          backgroundImage: `linear-gradient(rgba(248, 250, 252, 0.5), rgba(241, 245, 249, 0.5)), url('/apartment-bg1.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 60%",
+          backgroundAttachment: "fixed",
+        }}
       >
         <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-slate-800/3 via-transparent to-blue-900/3"></div>
         <div className="absolute top-10 right-20 h-64 w-64 rounded-full bg-gradient-to-br from-slate-700/10 to-blue-800/10 blur-3xl"></div>
@@ -328,7 +599,7 @@ export default function LandingPage() {
           <div className="scroll-reveal mb-16 text-center">
             <h2 className="mb-6 text-4xl font-bold tracking-tight lg:text-5xl">
               <span className="bg-gradient-to-r from-gray-900 to-slate-800 bg-clip-text text-transparent">
-                Our Premium{' '}
+                Our Premium{" "}
               </span>
               <span className="bg-gradient-to-r from-slate-800 via-blue-800 to-indigo-900 bg-clip-text text-transparent">
                 Services
@@ -345,6 +616,11 @@ export default function LandingPage() {
                 icon={PaintBucket}
                 title="Professional Painting"
                 description="Complete turnover painting with premium paints and expert application for a fresh, move-in ready appearance."
+                images={[
+                  "/painting-1.jpg",
+                  "/painting-2.jpg",
+                  "/painting-3.jpg",
+                ]}
               />
             </div>
             <div className="scroll-reveal">
@@ -352,6 +628,11 @@ export default function LandingPage() {
                 icon={Sparkles}
                 title="Carpet Cleaning"
                 description="Deep extraction carpet cleaning that removes stains, odors, and allergens for pristine flooring."
+                images={[
+                  "/carpet-cleaning-1.jpg",
+                  "/carpet-cleaning-2.jpg",
+                  "/carpet-cleaning-3.jpg",
+                ]}
               />
             </div>
             <div className="scroll-reveal">
@@ -359,6 +640,11 @@ export default function LandingPage() {
                 icon={Home}
                 title="Full Unit Cleaning"
                 description="Comprehensive move-in/move-out cleaning covering every surface, fixture, and detail."
+                images={[
+                  "/unit-cleaning-1.jpg",
+                  "/unit-cleaning-2.jpg",
+                  "/unit-cleaning-3.jpg",
+                ]}
               />
             </div>
             <div className="scroll-reveal">
@@ -366,6 +652,11 @@ export default function LandingPage() {
                 icon={RefreshCw}
                 title="Full Room Restoration"
                 description="Complete rehabilitation including repairs, refinishing, and restoration to like-new condition."
+                images={[
+                  "/restoration-1.jpg",
+                  "/restoration-2.jpg",
+                  "/restoration-3.jpg",
+                ]}
               />
             </div>
           </div>
@@ -459,6 +750,67 @@ export default function LandingPage() {
                 >
                   Get Your Free Quote
                 </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Reviews */}
+      <section
+        className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 px-4 py-20 sm:px-6 lg:px-8"
+        style={{
+          backgroundImage: `linear-gradient(rgba(248, 250, 252, 0.7), rgba(241, 245, 249, 0.7)), url('/handshake-bg.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-16 text-center">
+            <h2 className="mb-6 text-4xl font-bold text-gray-900 lg:text-5xl">
+              What Our Clients Say
+            </h2>
+            <p className="mx-auto max-w-3xl text-xl text-gray-600">
+              Don't just take our word for it - hear from property managers who
+              trust M4 PRO SOLUTIONS
+            </p>
+          </div>
+
+          <TestimonialCarousel />
+
+          {/* Trust indicators */}
+          <div className="mt-16 grid grid-cols-2 gap-8 text-center md:grid-cols-4">
+            <div className="group">
+              <div className="mb-3 text-3xl font-bold text-blue-600 transition-colors duration-300 group-hover:text-blue-700">
+                500+
+              </div>
+              <div className="text-sm font-medium tracking-wide text-gray-600 uppercase">
+                Projects Completed
+              </div>
+            </div>
+            <div className="group">
+              <div className="mb-3 text-3xl font-bold text-blue-600 transition-colors duration-300 group-hover:text-blue-700">
+                98%
+              </div>
+              <div className="text-sm font-medium tracking-wide text-gray-600 uppercase">
+                Satisfaction Rate
+              </div>
+            </div>
+            <div className="group">
+              <div className="mb-3 text-3xl font-bold text-blue-600 transition-colors duration-300 group-hover:text-blue-700">
+                5★
+              </div>
+              <div className="text-sm font-medium tracking-wide text-gray-600 uppercase">
+                Average Rating
+              </div>
+            </div>
+            <div className="group">
+              <div className="mb-3 text-3xl font-bold text-blue-600 transition-colors duration-300 group-hover:text-blue-700">
+                24h
+              </div>
+              <div className="text-sm font-medium tracking-wide text-gray-600 uppercase">
+                Response Time
               </div>
             </div>
           </div>
